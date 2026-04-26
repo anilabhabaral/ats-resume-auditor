@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ATS Resume Auditor</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0f172a; /* Dark slate */
+            --card-bg: #1e293b; /* Slightly lighter slate for the card */
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --accent-primary: #3b82f6; /* Distinct blue accent */
+            --accent-hover: #2563eb;
+            --border-color: #334155;
+            --error-color: #ef4444;
+            --success-color: #10b981;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 2rem;
+        }
+
+        .container {
+            background-color: var(--card-bg);
+            width: 100%;
+            max-width: 800px;
+            padding: 2.5rem;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+            border: 1px solid var(--border-color);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .header h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: #ffffff;
+        }
+
+        .header p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: var(--text-main);
+        }
+
+        textarea {
+            width: 100%;
+            padding: 0.75rem;
+            background-color: #0f172a;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            color: var(--text-main);
+            font-size: 0.95rem;
+            resize: vertical;
+            transition: border-color 0.2s ease;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.25);
+        }
+
+        .file-upload-wrapper {
+            position: relative;
+            width: 100%;
+            padding: 2rem;
+            border: 2px dashed var(--border-color);
+            border-radius: 8px;
+            text-align: center;
+            background-color: rgba(15, 23, 42, 0.5);
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+
+        .file-upload-wrapper:hover {
+            border-color: var(--accent-primary);
+            background-color: rgba(59, 130, 246, 0.05);
+        }
+
+        .file-upload-wrapper input[type="file"] {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        .file-upload-text {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        .file-upload-text span {
+            color: var(--accent-primary);
+            font-weight: 600;
+        }
+
+        button {
+            width: 100%;
+            padding: 1rem;
+            background-color: var(--accent-primary);
+            color: #ffffff;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s ease, transform 0.1s ease;
+            margin-top: 1rem;
+        }
+
+        button:hover {
+            background-color: var(--accent-hover);
+        }
+
+        button:active {
+            transform: scale(0.98);
+        }
+
+        button:disabled {
+            background-color: var(--border-color);
+            cursor: not-allowed;
+            color: var(--text-muted);
+        }
+
+        #loading {
+            display: none;
+            text-align: center;
+            color: var(--accent-primary);
+            font-weight: 600;
+            margin-top: 1.5rem;
+            padding: 1rem;
+            border-radius: 8px;
+            background-color: rgba(59, 130, 246, 0.1);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+        }
+
+        /* Spinner Animation */
+        .spinner {
+            display: inline-block;
+            width: 1.5rem;
+            height: 1.5rem;
+            vertical-align: middle;
+            border: 3px solid rgba(59, 130, 246, 0.3);
+            border-radius: 50%;
+            border-top-color: var(--accent-primary);
+            animation: spin 1s ease-in-out infinite;
+            margin-right: 0.5rem;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        #output {
+            margin-top: 2rem;
+            padding: 1.5rem;
+            background-color: #0f172a;
+            color: #e2e8f0;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            white-space: pre-wrap;
+            display: none;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        .error-text {
+            border-color: var(--error-color) !important;
+            color: #fca5a5 !important;
+        }
+        
+        .file-selected {
+            color: var(--success-color);
+            font-weight: 600;
+            margin-top: 0.5rem;
+            display: block;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="header">
+            <h1>ATS Resume Auditor</h1>
+            <p>Upload your resume and the target job description to get a brutal, AI-powered audit of your qualifications and ATS keyword match.</p>
+        </div>
+
+        <form id="auditForm">
+            <div class="form-group">
+                <label for="jd">Job Description</label>
+                <textarea id="jd" name="jd" rows="6" placeholder="Paste the full job description here..." required></textarea>
+            </div>
+            
+            <div class="form-group">
+                <label>Upload Resume</label>
+                <div class="file-upload-wrapper">
+                    <input type="file" id="resume" name="resume" accept="application/pdf" required>
+                    <div class="file-upload-text">
+                        <span>Click to upload</span> or drag and drop your PDF here
+                        <br><small id="fileNameDisplay" class="file-selected"></small>
+                    </div>
+                </div>
+            </div>
+            
+            <button type="submit" id="submitBtn">Analyze Resume</button>
+        </form>
+        
+        <div id="loading">
+            <span class="spinner"></span> Analyzing document and querying AI...
+        </div>
+        
+        <pre id="output"></pre>
+    </div>
+
+    <script>
+        const form = document.getElementById('auditForm');
+        const submitBtn = document.getElementById('submitBtn');
+        const loadingIndicator = document.getElementById('loading');
+        const outputArea = document.getElementById('output');
+        const fileInput = document.getElementById('resume');
+        const fileNameDisplay = document.getElementById('fileNameDisplay');
+
+        // Show the selected file name dynamically
+        fileInput.addEventListener('change', function() {
+            if (this.files && this.files.length > 0) {
+                fileNameDisplay.textContent = 'Selected: ' + this.files[0].name;
+            } else {
+                fileNameDisplay.textContent = '';
+            }
+        });
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            outputArea.style.display = 'none';
+            outputArea.innerText = '';
+            outputArea.classList.remove('error-text');
+            loadingIndicator.style.display = 'block';
+            submitBtn.disabled = true;
+            submitBtn.innerText = "Processing...";
+            
+            try {
+                const response = await fetch('/api/audit', {
+                    method: 'POST',
+                    body: new FormData(form)
+                });
+
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    throw new Error(`Server returned status ${response.status}: ${errorText}`);
+                }
+                
+                const result = await response.text();
+                outputArea.innerText = result;
+                outputArea.style.display = 'block';
+                
+            } catch (err) {
+                outputArea.innerText = "🚨 An error occurred:\n\n" + err.message;
+                outputArea.classList.add('error-text');
+                outputArea.style.display = 'block';
+                console.error("Audit Error:", err);
+            } finally {
+                loadingIndicator.style.display = 'none';
+                submitBtn.disabled = false;
+                submitBtn.innerText = "Analyze Resume";
+            }
+        });
+    </script>
+</body>
+</html>
