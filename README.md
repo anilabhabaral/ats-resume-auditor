@@ -30,6 +30,17 @@ The output gives you:
 4. **Insights Generation:** Gemini evaluates the data acting as a Senior ATS Specialist and returns a structured, brutal audit.
 5. **Display:** The plain-text response is sent back to the frontend and rendered in the browser.
 
+## 🎥 Demo
+
+
+![ATS Resume Auditor App Interface](./demo.png)
+
+**Step-by-Step Walkthrough:**
+1. **Input JD:** Paste the full text of the Job Description you are targeting into the text area.
+2. **Upload Resume:** Use the drag-and-drop zone to upload your current resume (must be a `.pdf`).
+3. **Analyze:** Click the "Analyze Resume" button. The app will extract your text and send it to the Gemini LLM.
+4. **Review Results:** Within seconds, receive a brutal, structured breakdown including your Match Score, ATS keywords, and specific bullet-point rewrites to improve your chances of landing an interview.
+
 ## 💻 How to Build & Run Locally
 
 ### Prerequisites
