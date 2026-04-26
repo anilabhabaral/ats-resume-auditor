@@ -84,17 +84,15 @@ If you prefer not to install Java and Maven on your local machine, you can run t
    GEMINI_API_KEY=your_actual_api_key_here
    ```
 3. Build and start the container:
-   
-   ```bash
+```
 docker-compose up --build -d
-   ```
+```
 4. Access the application:
 Navigate to [http://localhost:8080](http://localhost:8080) in your web browser.
 5. To stop the application:
-   
-   ```bash
+```
 docker-compose down
-   ```
+```
 (Note: The Dockerfile includes a specific configuration `-Djava.net.preferIPv4Stack=true` to prevent IPv6 networking issues between Docker and Google's APIs.)
 
 # 🌟 Advantages & Real-Life Issues Solved
