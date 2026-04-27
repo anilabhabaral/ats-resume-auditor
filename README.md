@@ -32,8 +32,7 @@ The output gives you:
 
 ## 🎥 Demo
 
-
-![ATS Resume Auditor App Interface](./demo.png)
+https://github.com/user-attachments/assets/f2ee6459-9aa2-440d-80c3-d0af8e0122c2
 
 **Step-by-Step Walkthrough:**
 1. **Input JD:** Paste the full text of the Job Description you are targeting into the text area.
